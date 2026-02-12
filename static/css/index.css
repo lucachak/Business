@@ -1,0 +1,569 @@
+:root {
+  --bg-color: #ffffff;
+  --text-primary: #000000;
+  --text-secondary: #555555;
+  --accent-color: #000000;
+  --line-color: #000000;
+}
+
+/* --- SCROLL SUAVE NATIVO --- */
+html {
+  scroll-behavior: smooth;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  overflow-x: hidden; /* Mudado de overflow:hidden para permitir scroll vertical */
+  width: 100%;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* --- Header --- */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem 5%;
+  position: fixed; /* Header fixo para acompanhar o scroll */
+  width: 100%;
+  top: 0;
+  z-index: 20;
+  /* Opcional: fundo branco translúcido no header ao rolar */
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(5px);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+  color: var(--text-primary);
+  position: relative;
+  z-index: 10;
+}
+
+.logo-icon {
+  font-size: 1.8rem;
+}
+.logo-text {
+  font-size: 1rem;
+  text-transform: uppercase;
+}
+
+/* --- Botão Hambúrguer --- */
+.hamburger {
+  width: 30px;
+  height: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+  z-index: 21;
+  position: relative;
+}
+
+.hamburger span {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background-color: var(--text-primary);
+  border-radius: 2px;
+  transition: all 0.3s ease-in-out;
+}
+
+.hamburger.active span:nth-child(1) {
+  transform: translateY(9px) rotate(45deg);
+  background-color: #ffffff;
+}
+.hamburger.active span:nth-child(2) {
+  transform: translateY(-9px) rotate(-45deg);
+  background-color: #ffffff;
+}
+
+/* --- Menu Fullscreen (Translucent Blur) --- */
+.fullscreen-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.85); /* Translúcido */
+  backdrop-filter: blur(12px); /* Blur effect */
+  -webkit-backdrop-filter: blur(12px);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    visibility 0.4s step-end;
+  z-index: 15;
+}
+
+.fullscreen-menu.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition:
+    opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    visibility 0s step-start;
+}
+
+.menu-links {
+  list-style: none;
+  text-align: center;
+}
+.menu-links li {
+  margin: 20px 0;
+  overflow: hidden;
+}
+
+.menu-links a {
+  display: block;
+  font-size: 3rem;
+  font-weight: 300;
+  color: #ffffff;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: -1px;
+  transform: translateY(100%);
+  transition:
+    transform 0.5s ease,
+    color 0.3s ease;
+}
+
+.fullscreen-menu.active .menu-links a {
+  transform: translateY(0);
+  transition-delay: calc(0.1s * var(--i));
+}
+.menu-links a:hover {
+  color: #888;
+}
+
+/* --- Hero Section --- */
+.hero {
+  height: 100vh; /* Garante que o Hero ocupe a tela toda */
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 5%;
+  position: relative;
+  z-index: 5;
+  /* Importante para o scroll funcionar corretamente abaixo dele */
+}
+
+.content {
+  max-width: 650px;
+  pointer-events: none;
+}
+.content * {
+  pointer-events: auto;
+}
+
+h1 {
+  font-size: 4.5rem;
+  font-weight: 300;
+  text-transform: uppercase;
+  line-height: 1.1;
+  margin-bottom: 2rem;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+}
+
+.subtitle {
+  font-size: 1.25rem;
+  font-weight: 300;
+  margin-bottom: 3rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  max-width: 80%;
+}
+
+.btn-cta {
+  background-color: var(--accent-color);
+  color: white;
+  padding: 20px 48px;
+  border: none;
+  border-radius: 100px;
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+.btn-cta:hover {
+  transform: translateY(-2px);
+  background-color: #333;
+}
+
+/* --- 3D e Fundo --- */
+.background-geometry {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+#globe-3d {
+  position: absolute;
+  right: -10%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 850px;
+  height: 850px;
+  z-index: 1;
+}
+
+.line {
+  position: absolute;
+  background-color: var(--line-color);
+  opacity: 0.08;
+  left: 50%;
+  top: 50%;
+  width: 300vmax;
+  transform-origin: center;
+}
+.line-1 {
+  transform: translate(-50%, -50%) rotate(25deg) translateY(-20vh);
+  height: 1px;
+}
+.line-2 {
+  transform: translate(-50%, -50%) rotate(-45deg) translateY(10vh);
+  height: 1px;
+  opacity: 0.15;
+}
+.line-3 {
+  transform: translate(-50%, -50%) rotate(60deg) translateY(30vh);
+  height: 1px;
+}
+
+/* --- NOVAS SEÇÕES DE CONTEÚDO --- */
+
+.content-section {
+  padding: 120px 5%;
+  min-height: 80vh; /* Ocupa quase a tela toda */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  background-color: #fff;
+  position: relative;
+  z-index: 5;
+}
+
+/* Container para centralizar o texto */
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.content-section h2 {
+  font-size: 3rem;
+  font-weight: 300;
+  margin-bottom: 2rem;
+  text-transform: uppercase;
+  letter-spacing: -1px;
+  color: var(--text-primary);
+}
+
+.section-text {
+  font-size: 1.25rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  font-weight: 300;
+}
+
+/* Fundo alternativo suave */
+.dark-bg {
+  background-color: #fafafa;
+}
+
+/* Grid de Projetos */
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.project-card {
+  padding: 2.5rem;
+  background: #fff;
+  cursor: pointer;
+  position: relative; /* Necessário para o posicionamento do fundo */
+
+  /* Removemos a borda sólida antiga */
+  /* border: 1px solid rgba(0,0,0,0.08); */
+
+  /* Usamos uma sombra sutil para delimitar o card quando não estiver em hover */
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08);
+
+  /* --- O TRUQUE DA BORDA ANIMADA --- */
+  /* Definimos o tamanho do traço e do espaço */
+  --dash-size: 12px;
+  --gap-size: 8px;
+  --line-color: #000000; /* Cor da linha */
+  --bg-color: #fff; /* Cor do fundo do card para "apagar" a linha */
+
+  /* Criamos 4 gradientes, um para cada lado, simulando linhas tracejadas */
+  background-image: 
+        /* Topo (indo para a direita) */
+    linear-gradient(
+      to right,
+      var(--line-color) var(--dash-size),
+      transparent var(--dash-size)
+    ),
+    /* Direita (indo para baixo) */
+    linear-gradient(
+        to bottom,
+        var(--line-color) var(--dash-size),
+        transparent var(--dash-size)
+      ),
+    /* Baixo (indo para a esquerda) */
+    linear-gradient(
+        to left,
+        var(--line-color) var(--dash-size),
+        transparent var(--dash-size)
+      ),
+    /* Esquerda (indo para cima) */
+    linear-gradient(
+        to top,
+        var(--line-color) var(--dash-size),
+        transparent var(--dash-size)
+      );
+
+  /* Definimos a espessura das linhas (2px) e o padrão de repetição */
+  background-size:
+    calc(var(--dash-size) + var(--gap-size)) 2px,
+    /* Topo: largura do padrão x 2px altura */ 2px
+      calc(var(--dash-size) + var(--gap-size)),
+    /* Direita: 2px largura x altura do padrão */
+    calc(var(--dash-size) + var(--gap-size)) 2px,
+    /* Baixo */ 2px calc(var(--dash-size) + var(--gap-size)); /* Esquerda */
+
+  /* Posicionamos cada linha na sua borda correta */
+  background-position:
+    0 0,
+    /* Topo-esquerda */ 100% 0,
+    /* Topo-direita */ 100% 100%,
+    /* Baixo-direita */ 0 100%; /* Baixo-esquerda */
+
+  /* No estado normal, não repetimos o fundo, então as linhas não aparecem (ou aparecem só um pontinho) */
+  background-repeat: no-repeat;
+
+  /* Transições suaves para o lift e a sombra */
+  transition:
+    transform 0.4s ease,
+    box-shadow 0.4s ease,
+    background-color 0.4s ease;
+}
+
+/* Estado HOVER */
+.project-card:hover {
+  /* Lift e sombra existentes */
+  transform: translateY(-8px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+
+  /* --- ATIVANDO A ANIMAÇÃO --- */
+  /* Fazemos o padrão se repetir para criar a linha completa */
+  background-repeat: repeat-x, repeat-y, repeat-x, repeat-y;
+
+  /* Aplicamos a animação de "marchar" */
+  animation: dashAnimation 1s linear infinite;
+}
+
+/* A Animação que move o fundo */
+@keyframes dashAnimation {
+  to {
+    /* Movemos a posição do fundo exatamente o tamanho de um padrão (traço + espaço) */
+    /* Isso cria a ilusão de um fluxo contínuo */
+    background-position:
+      calc(var(--dash-size) + var(--gap-size)) 0,
+      100% calc(var(--dash-size) + var(--gap-size)),
+      calc(100% - (var(--dash-size) + var(--gap-size))) 100%,
+      0 calc(100% - (var(--dash-size) + var(--gap-size)));
+  }
+}
+
+.project-card h3 {
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin-bottom: 0.8rem;
+}
+
+.project-card p {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  font-weight: 300;
+}
+
+/* Link de Contato */
+.link-contact {
+  font-size: 2.5rem;
+  font-weight: 400;
+  color: var(--text-primary);
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  transition: border-color 0.3s;
+}
+
+.link-contact:hover {
+  border-bottom-color: var(--text-primary);
+}
+
+@media (max-width: 1024px) {
+  #globe-3d {
+    width: 600px;
+    height: 600px;
+    right: -15%;
+  }
+  h1 {
+    font-size: 3.5rem;
+  }
+}
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2.8rem;
+  }
+  .hero {
+    align-items: flex-start;
+    padding-top: 15vh;
+  }
+  #globe-3d {
+    width: 450px;
+    height: 450px;
+    right: -20%;
+    top: 60%;
+    opacity: 0.6;
+  }
+  .link-contact {
+    font-size: 1.8rem;
+  }
+}
+/* --- MODAL / INFO CARD STYLES --- */
+
+/* Fundo Escuro com Blur */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  z-index: 100; /* Acima de tudo */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0; /* Começa invisível para animação */
+  transition: opacity 0.3s ease;
+}
+
+/* O Cartão do Modal */
+.modal-card {
+  background: #ffffff;
+  width: 90%;
+  max-width: 500px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+  transform: translateY(20px); /* Começa um pouco abaixo */
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Imagem no topo do modal */
+.modal-image {
+  width: 100%;
+  height: 200px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+/* Botão Fechar */
+.close-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s;
+}
+
+.close-btn:hover {
+  transform: scale(1.1);
+}
+
+/* Conteúdo de Texto */
+.modal-info {
+  padding: 2rem;
+}
+
+.modal-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 0.2rem;
+  color: var(--text-primary);
+}
+
+.modal-subtitle {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+}
+
+.modal-tags {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.tag {
+  background: #f3f4f6;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.modal-desc {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #444;
+  margin-bottom: 2rem;
+}
+
+.modal-cta {
+  width: 100%;
+  text-align: center;
+}

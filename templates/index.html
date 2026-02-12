@@ -1,0 +1,131 @@
+{% load static %}
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lucachk Systems</title>
+    <link
+      rel="shortcut icon"
+      type="image/png"
+      href="{% static 'img/image.png' %}"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/index.css' %}" />
+    <script src="https://unpkg.com/htmx.org@1.9.6"></script>
+  </head>
+  <body>
+    <header>
+      <div class="logo">
+        <div class="logo-icon">▲</div>
+        <div class="logo-text">
+          Lucachk<br />
+          Systems
+        </div>
+      </div>
+      <nav>
+        <div class="hamburger" id="hamburger-btn">
+          <span></span>
+          <span></span>
+        </div>
+      </nav>
+    </header>
+
+    <div class="fullscreen-menu" id="menu-overlay">
+      <ul class="menu-links">
+        <li style="--i: 1"><a href="#sobre">Sobre Nós</a></li>
+        <li style="--i: 2"><a href="#projetos">Projetos</a></li>
+        <li style="--i: 3"><a href="#contato">Contato</a></li>
+      </ul>
+    </div>
+
+    <main class="hero">
+      <div class="background-geometry">
+        <div id="globe-3d"></div>
+        <div class="line line-1"></div>
+        <div class="line line-2"></div>
+        <div class="line line-3"></div>
+      </div>
+
+      <div class="content">
+        <h1>System<br />Architecture<br />Redefined.</h1>
+        <p class="subtitle">
+          Next-generation infrastructure for scalable applications. Minimalist
+          code. Maximum performance.
+        </p>
+        <button
+          class="btn-cta"
+          onclick="document.getElementById('projetos').scrollIntoView()"
+        >
+          Get Started
+        </button>
+      </div>
+    </main>
+
+    <section id="sobre" class="content-section">
+      <div class="container">
+        <h2>About Us</h2>
+        <p class="section-text">
+          We are architects of the digital future. Our mission is to simplify
+          complexity through elegant code and robust infrastructure. We don't
+          just build software; we engineer ecosystems designed for scalability
+          and precision.
+        </p>
+      </div>
+    </section>
+
+    <section id="projetos" class="content-section dark-bg">
+      <div class="project-grid">
+        <div
+          class="project-card"
+          hx-get="{% url 'project_detail' 1 %}"
+          hx-target="#modal-container"
+          hx-swap="innerHTML"
+          style="cursor: pointer"
+        >
+          <h3>Fintech Core</h3>
+          <p>High-frequency trading platform architecture.</p>
+        </div>
+
+        <div
+          class="project-card"
+          hx-get="{% url 'project_detail' 2 %}"
+          hx-target="#modal-container"
+          hx-swap="innerHTML"
+          style="cursor: pointer"
+        >
+          <h3>Health Data</h3>
+          <p>AI-driven diagnostics system securely encrypted.</p>
+        </div>
+
+        <div
+          class="project-card"
+          hx-get="{% url 'project_detail' 3 %}"
+          hx-target="#modal-container"
+          hx-swap="innerHTML"
+          style="cursor: pointer"
+        >
+          <h3>Urban Flow</h3>
+          <p>Smart city traffic management neural network.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="contato" class="content-section">
+      <div class="container">
+        <h2>Contact</h2>
+        <p class="section-text">Ready to redefine your industry?</p>
+        <br />
+        <a href="mailto:lucachaklucas@gmail.com" class="link-contact"
+          >lucachaklucas@gmail.com</a
+        >
+      </div>
+    </section>
+    <div id="modal-container"></div>
+    <script src="{% static 'js/index.js' %}"></script>
+  </body>
+</html>

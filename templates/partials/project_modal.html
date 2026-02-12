@@ -1,0 +1,42 @@
+<div class="modal-backdrop" id="modal-backdrop" onclick="closeModal()">
+  <div class="modal-card" onclick="event.stopPropagation()">
+    <div
+      class="modal-image"
+      style="background-image: url('{{ project.image }}');"
+    >
+      <button class="close-btn" onclick="closeModal()">×</button>
+    </div>
+
+    <div class="modal-info">
+      <h3 class="modal-title">{{ project.title }}</h3>
+      <p class="modal-subtitle">{{ project.subtitle }}</p>
+
+      <div class="modal-tags">
+        {% for tag in project.tags %}
+        <span class="tag">{{ tag }}</span>
+        {% endfor %}
+      </div>
+
+      <p class="modal-desc">{{ project.description }}</p>
+
+      <button class="btn-cta modal-cta">View Case Study</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Função simples para remover o modal do DOM
+  function closeModal() {
+    const modal = document.getElementById("modal-backdrop");
+    modal.style.opacity = "0";
+    setTimeout(() => {
+      modal.remove();
+    }, 300);
+  }
+
+  // Animação de entrada suave
+  setTimeout(() => {
+    document.getElementById("modal-backdrop").style.opacity = "1";
+    document.querySelector(".modal-card").style.transform = "translateY(0)";
+  }, 10);
+</script>
