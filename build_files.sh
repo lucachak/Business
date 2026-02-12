@@ -2,12 +2,16 @@
 
 echo "Building Project..."
 
-# Garante o pip
-python3.12 -m ensurepip --default-pip
+# 1. Cria um ambiente virtual (venv)
+python3.12 -m venv build_venv
 
-# Instala dependências
-python3.12 -m pip install -r requirements.txt
+# 2. Ativa o ambiente virtual
+source build_venv/bin/activate
 
-# Coleta estáticos
+# 3. Instala as dependências DENTRO do venv
+# (Agora o pip vai funcionar sem erro de permissão)
+pip install -r requirements.txt
+
+# 4. Coleta os estáticos usando o python do venv
 echo "Collect Static..."
-python3.12 manage.py collectstatic --noinput --clear
+python3 manage.py collectstatic --noinput --clear
