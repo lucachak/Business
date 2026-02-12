@@ -2,12 +2,12 @@
 
 echo "Building Project..."
 
-# 1. Garante que o pip está instalado
-python3 -m ensurepip --default-pip
+# Garante o pip
+python3.12 -m ensurepip --default-pip
 
-# 2. Instala as dependências
-python3 -m pip install -r requirements.txt
+# Instala dependências
+python3.12 -m pip install -r requirements.txt
 
-# 3. Coleta os estáticos
+# Coleta estáticos
 echo "Collect Static..."
-python3 manage.py collectstatic --noinput --clear
+python3.12 manage.py collectstatic --noinput --clear
