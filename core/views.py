@@ -1,37 +1,41 @@
 from django.shortcuts import Http404, render
 
-# Simulação de Banco de Dados
+# Dados dos Projetos Reais
 PROJECTS_DATA = {
     1: {
-        "title": "Fintech Core",
-        "subtitle": "High-frequency trading platform",
-        "description": "Uma arquitetura de baixa latência projetada para processar milhões de transações por segundo. Utilizamos C++ para o núcleo de execução e Python para a camada de análise de dados, garantindo precisão de microssegundos.",
-        "tags": ["C++", "Python", "AWS", "Low Latency"],
-        "image": "https://images.unsplash.com/photo-1611974765270-ca1258634369?q=80&w=1000&auto=format&fit=crop", # Imagem placeholder abstrata
+        "title": "CourierIQ",
+        "subtitle": "Logistics & Delivery Tracking",
+        "description": "Sistema inteligente de gestão de entregas e rastreamento. Focado na otimização de rotas e status em tempo real para transportadoras e clientes finais. Arquitetura modular pronta para escala.",
+        "tags": ["Python", "Django", "Tracking API", "Logistics"],
+        "image": "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=1000&auto=format&fit=crop",  # Foto de container/logística
+        "github_url": "https://github.com/lucachak/CourierIQ",
     },
     2: {
-        "title": "Health Data",
-        "subtitle": "AI-driven diagnostics",
-        "description": "Sistema de criptografia ponta a ponta para dados sensíveis de pacientes, integrado a uma rede neural que auxilia no diagnóstico precoce de patologias através de análise de imagem.",
-        "tags": ["AI/ML", "Cryptography", "HIPAA Compliant"],
-        "image": "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=1000&auto=format&fit=crop",
+        "title": "Online Courses",
+        "subtitle": "LMS Education Platform",
+        "description": "Plataforma de ensino a distância (LMS) completa. Gerenciamento de alunos, upload de aulas e acompanhamento de progresso. Desenvolvido com foco na experiência do usuário e entrega de conteúdo multimídia.",
+        "tags": ["Django", "Education", "Streaming", "User Mgmt"],
+        "image": "https://images.unsplash.com/photo-1501504905252-473c47e087f8?q=80&w=1000&auto=format&fit=crop",  # Foto de estudos/café
+        "github_url": "https://github.com/lucachak/Online-courses",
     },
     3: {
-        "title": "Urban Flow",
-        "subtitle": "Smart city traffic management",
-        "description": "Rede de sensores IoT conectada a um sistema central de processamento que otimiza o fluxo de semáforos em tempo real, reduzindo o congestionamento urbano em até 30%.",
-        "tags": ["IoT", "Real-time Data", "GoLang"],
-        "image": "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?q=80&w=1000&auto=format&fit=crop",
-    }
+        "title": "Store Core",
+        "subtitle": "E-commerce Architecture",
+        "description": "Backend robusto para comércio eletrônico. Inclui gestão de inventário, carrinho de compras e integração segura de pagamentos. Estrutura preparada para alta concorrência de transações.",
+        "tags": ["E-commerce", "Payment Gateway", "Security", "SQL"],
+        "image": "https://images.unsplash.com/photo-1556742049-0cfed4f7a07d?q=80&w=1000&auto=format&fit=crop",  # Foto de tecnologia/pagamento
+        "github_url": "https://github.com/lucachak/Store",
+    },
 }
+
 
 def index(request):
     return render(request, "index.html")
+
 
 def project_detail(request, project_id):
     project = PROJECTS_DATA.get(project_id)
     if not project:
         raise Http404("Project not found")
-    
-    # Retorna apenas o pedaço de HTML (Partial)
+
     return render(request, "partials/project_modal.html", {"project": project})
