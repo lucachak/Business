@@ -26,6 +26,14 @@ PROJECTS_DATA = {
         "image": "https://images.unsplash.com/photo-1556742049-0cfed4f7a07d?q=80&w=1000&auto=format&fit=crop",  # Foto de tecnologia/pagamento
         "github_url": "https://github.com/lucachak/Store",
     },
+    4: {
+        "title": "Hotel Manager",
+        "subtitle": "Hotel Management Architecture",
+        "description": "Backend robusto para gestao de hotel. Inclui gestão de inventário,comandas e integração segura de pagamentos",
+        "tags": ["Hotel", "CRM", "Security", "PostgreSQL"],
+        "image": "https://images.unsplash.com/photo-1556742049-0cfed4f7a07d?q=80&w=1000&auto=format&fit=crop",  # Foto de tecnologia/pagamento
+        "github_url": "https://business-zeta-eight.vercel.app/",
+    },
 }
 
 
