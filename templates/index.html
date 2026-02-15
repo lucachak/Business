@@ -109,7 +109,13 @@
             <h3>Store Core</h3>
             <p data-i18n="proj_3_desc">Robust e-commerce backend architecture.</p>
           </div>
-
+            
+          <div class="project-card"
+               hx-get="{% url 'project_detail' 4 %}" 
+               hx-target="#modal-container" 
+               hx-swap="innerHTML">
+            <h3>Hotel Manager</h3>
+            <p data-i18n="proj_4_desc">Versatile Hotel management system.</p>
         </div>
       </div>
     </section>
@@ -174,6 +180,7 @@
                 proj_1_desc: "Intelligent logistics & delivery tracking system.",
                 proj_2_desc: "Scalable LMS platform for digital education.",
                 proj_3_desc: "Robust e-commerce backend architecture.",
+                prokect_4_desc: "Versatile Hotel management system.",
                 contact_title: "Contact",
                 contact_sub: "Ready to redefine your industry? Let's talk."
             },
@@ -190,6 +197,7 @@
                 proj_1_desc: "Sistema inteligente de logística e rastreamento de entregas.",
                 proj_2_desc: "Plataforma LMS escalável para educação digital.",
                 proj_3_desc: "Arquitetura robusta de backend para e-commerce.",
+                prokect_4_desc: "Sistema de gestão de hotel versátil.",
                 contact_title: "Contato",
                 contact_sub: "Pronto para redefinir sua indústria? Vamos conversar."
             }
