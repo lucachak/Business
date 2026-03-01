@@ -1,228 +1,1265 @@
-{% load static %}
-<!doctype html>
-<html lang="pt-br">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Lucachak Systems</title>
-
-    <link rel="shortcut icon" type="image/png" href="{% static 'img/favicon.png' %}" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap"
-      rel="stylesheet"
-    />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://unpkg.com/htmx.org@1.9.6"></script>
-    <link rel="stylesheet" href="{% static 'css/index.css' %}" />
-  </head>
-  <body hx-boost="true">
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lucachak Tech | Precision Engineering for Startups</title>
+    <meta name="description" content="Custom software, ERPs, web automation, and scalable backend architectures. We write the systems your startup actually needs.">
     
-    <header>
-      <div class="logo">
-        <div class="logo-icon">▲</div>
-        <div class="logo-text">
-          Lucachak<br />
-          Systems
-        </div>
-      </div>
-      
-      <nav style="display: flex; align-items: center; gap: 20px;">
-        
-        <button id="lang-toggle" class="lang-btn">PT</button>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Manrope:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.6"></script>
+    <style>
+        :root {
+            /* Dark Mode (Default) Variables */
+            --bg-base: #050505;
+            --bg-surface: #0f0f11;
+            --bg-surface-hover: #161619;
+            --bg-glass: rgba(15, 15, 17, 0.7);
+            
+            --text-primary: #ffffff;
+            --text-secondary: #a1a1aa;
+            --text-muted: #71717a;
+            
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(255, 255, 255, 0.15);
+            
+            /* Electric Emerald */
+            --accent: #10b981;
+            --accent-glow: rgba(16, 185, 129, 0.15);
+            --accent-hover: #34d399;
+            
+            --grid-color: rgba(255, 255, 255, 0.03);
+            --selection-bg: rgba(16, 185, 129, 0.3);
 
-        <div class="hamburger" id="hamburger-btn">
-          <span></span>
-          <span></span>
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            
+            --font-display: 'Space Grotesk', sans-serif;
+            --font-body: 'Manrope', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            
+            --transition: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        [data-theme="light"] {
+            --bg-base: #f4f4f5;
+            --bg-surface: #ffffff;
+            --bg-surface-hover: #fafafa;
+            --bg-glass: rgba(255, 255, 255, 0.8);
+            
+            --text-primary: #09090b;
+            --text-secondary: #52525b;
+            --text-muted: #a1a1aa;
+            
+            --border-subtle: rgba(0, 0, 0, 0.08);
+            --border-hover: rgba(0, 0, 0, 0.15);
+            
+            --accent: #059669;
+            --accent-glow: rgba(5, 150, 105, 0.1);
+            --accent-hover: #047857;
+            
+            --grid-color: rgba(0, 0, 0, 0.04);
+        }
+
+        /* Reset & Base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scrollbar-width: thin;
+            scrollbar-color: var(--border-hover) var(--bg-base);
+        }
+
+        html::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        html::-webkit-scrollbar-track {
+            background: var(--bg-base);
+        }
+        
+        html::-webkit-scrollbar-thumb {
+            background-color: var(--border-hover);
+            border-radius: 4px;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--bg-base);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: background-color var(--transition), color var(--transition);
+        }
+
+        ::selection {
+            background-color: var(--selection-bg);
+            color: var(--text-primary);
+        }
+
+        h1, h2, h3, h4 {
+            font-family: var(--font-display);
+            font-weight: 600;
+            line-height: 1.2;
+            letter-spacing: -0.03em;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+            transition: color var(--transition);
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 5%;
+        }
+
+        /* Scroll Reveal Utility */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Typography */
+        .badge {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--accent);
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin-bottom: 4rem;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.875rem 1.5rem;
+            border-radius: var(--radius-md);
+            font-family: var(--font-display);
+            font-weight: 500;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all var(--transition);
+            border: 1px solid transparent;
+        }
+
+        .btn-primary {
+            background-color: var(--text-primary);
+            color: var(--bg-base);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            opacity: 0.9;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border-color: var(--border-subtle);
+            color: var(--text-primary);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            background-color: var(--accent-glow);
+        }
+
+        /* Layout Sections */
+        section {
+            padding: 8rem 0;
+            position: relative;
+        }
+
+        /* --- Navbar --- */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 1.25rem 0;
+            background: var(--bg-glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-subtle);
+            z-index: 100;
+            transition: all var(--transition);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: -0.05em;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .nav-link:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .icon-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5rem;
+            border-radius: var(--radius-md);
+            transition: var(--transition);
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            font-weight: 600;
+            height: 36px;
+            min-width: 36px;
+        }
+
+        .icon-btn:hover {
+            color: var(--text-primary);
+            background: var(--border-subtle);
+        }
+
+        /* --- Hero Section --- */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            padding-top: 5rem;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: -50%;
+            width: 200%;
+            height: 200%;
+            background-image: 
+                linear-gradient(var(--grid-color) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 30s linear infinite;
+            z-index: 0;
+            transform: perspective(500px) rotateX(60deg) translateY(-100px) translateZ(-200px);
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .hero-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60vw;
+            height: 60vw;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 60%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        @keyframes gridMove {
+            0% { transform: perspective(500px) rotateX(60deg) translateY(0) translateZ(-200px); }
+            100% { transform: perspective(500px) rotateX(60deg) translateY(50px) translateZ(-200px); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 6vw, 5rem);
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.04em;
+        }
+
+        .hero h1 span {
+            color: var(--text-secondary);
+        }
+
+        .hero p {
+            font-size: clamp(1.125rem, 2vw, 1.35rem);
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
+            max-width: 650px;
+        }
+
+        .hero-btns {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        /* --- Services --- */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 2.5rem 2rem;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--accent);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--border-hover);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+            background: var(--bg-surface-hover);
+        }
+
+        .card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .card-icon {
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            width: 40px;
+            height: 40px;
+        }
+
+        .card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* --- Process Section --- */
+        .process-list {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            max-width: 800px;
+            counter-reset: process;
+        }
+
+        .process-item {
+            display: flex;
+            gap: 2rem;
+            padding: 2rem;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            position: relative;
+        }
+
+        .process-item::before {
+            counter-increment: process;
+            content: "0" counter(process);
+            font-family: var(--font-mono);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--border-hover);
+        }
+
+        .process-item h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .process-item p {
+            color: var(--text-secondary);
+        }
+
+        /* --- Portfolio Section --- */
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .portfolio-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 2.5rem;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .portfolio-card:hover {
+            border-color: var(--accent);
+        }
+
+        .portfolio-tag {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .portfolio-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .portfolio-desc {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            flex-grow: 1;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .tech-badge {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            padding: 0.25rem 0.75rem;
+            background: var(--bg-base);
+            border: 1px solid var(--border-subtle);
+            border-radius: 100px;
+            color: var(--text-muted);
+        }
+
+        .portfolio-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: var(--font-display);
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .portfolio-link i {
+            width: 16px;
+            height: 16px;
+            transition: transform 0.2s;
+        }
+
+        .portfolio-link:hover {
+            color: var(--accent);
+        }
+
+        .portfolio-link:hover i {
+            transform: translateX(4px) translateY(-4px);
+        }
+
+        /* --- Why Us Section --- */
+        .why-us-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            border-top: 1px solid var(--border-subtle);
+            padding-top: 5rem;
+        }
+
+        .why-col h3 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .why-col h3 i {
+            color: var(--accent);
+            width: 20px;
+            height: 20px;
+        }
+
+        .why-col p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* --- Testimonials --- */
+        .testimonials {
+            background: var(--bg-surface);
+            border-top: 1px solid var(--border-subtle);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .testimonial-card {
+            padding: 2.5rem;
+            border-radius: var(--radius-lg);
+            background: var(--bg-base);
+            border: 1px solid var(--border-subtle);
+        }
+
+        .quote-icon {
+            color: var(--accent);
+            opacity: 0.5;
+            margin-bottom: 1.5rem;
+            width: 32px;
+            height: 32px;
+        }
+
+        .testimonial-text {
+            font-size: 1.125rem;
+            font-style: italic;
+            margin-bottom: 2rem;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .author-info h4 {
+            font-size: 1rem;
+            margin-bottom: 0.1rem;
+        }
+
+        .author-info p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* --- CTA Banner --- */
+        .cta-section {
+            text-align: center;
+            padding: 10rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-content {
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .cta-section h2 {
+            font-size: clamp(2.5rem, 4vw, 3.5rem);
+            margin-bottom: 1rem;
+        }
+
+        .cta-section p {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
+        }
+
+        /* --- Footer --- */
+        footer {
+            padding: 4rem 0 2rem;
+            border-top: 1px solid var(--border-subtle);
+            background: var(--bg-surface);
+        }
+
+        .footer-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .footer-brand p {
+            color: var(--text-secondary);
+            margin-top: 1rem;
+            max-width: 300px;
+            font-size: 0.9rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 4rem;
+        }
+
+        .footer-col h4 {
+            font-family: var(--font-display);
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-col ul {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .footer-col a {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .footer-col a:hover {
+            color: var(--accent);
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-subtle);
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-links a {
+            color: var(--text-muted);
+        }
+
+        .social-links a:hover {
+            color: var(--text-primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links, .nav-cta {
+                display: none;
+            }
+            .hero-btns {
+                flex-direction: column;
+                width: 100%;
+            }
+            .btn {
+                width: 100%;
+            }
+            .footer-links {
+                flex-direction: column;
+                gap: 2rem;
+            }
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="container nav-container">
+            <a href="#" class="logo">Lucachak<span>_</span>Tech</a>
+            
+            <ul class="nav-links">
+                <li><a href="#services" class="nav-link" data-i18n="nav_expertise">Expertise</a></li>
+                <li><a href="#portfolio" class="nav-link" data-i18n="nav_work">Work</a></li>
+                <li><a href="#process" class="nav-link" data-i18n="nav_process">Process</a></li>
+            </ul>
+
+            <div class="nav-actions">
+                <button class="icon-btn" id="lang-btn" aria-label="Toggle language">PT</button>
+                <button class="icon-btn" id="theme-btn" aria-label="Toggle theme">
+                    <i data-lucide="sun" id="theme-icon"></i>
+                </button>
+                <a href="#contact" class="btn btn-primary nav-cta" style="padding: 0.5rem 1rem; font-size: 0.85rem;" data-i18n="nav_cta">Let's Talk</a>
+            </div>
         </div>
-      </nav>
+    </nav>
+
+    <header class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-glow"></div>
+        
+        <div class="container">
+            <div class="hero-content reveal">
+                <span class="badge" data-i18n="hero_badge">Boutique Software House</span>
+                <h1 data-i18n="hero_title">Ship scalable systems.<br><span>Leave tech debt behind.</span></h1>
+                <p data-i18n="hero_subtitle">Lucachak Tech engineers custom software, automation pipelines, and robust backend architectures for startups that demand precision.</p>
+                <div class="hero-btns">
+                    <a href="#contact" class="btn btn-primary">
+                        <span data-i18n="hero_btn_primary">Initialize Project</span> <i data-lucide="arrow-right" style="width: 18px; height: 18px; margin-left: 8px;"></i>
+                    </a>
+                    <a href="#portfolio" class="btn btn-outline" data-i18n="hero_btn_secondary">Review Our Stack</a>
+                </div>
+            </div>
+        </div>
     </header>
 
-    <div class="fullscreen-menu" id="menu-overlay">
-      <ul class="menu-links">
-        <li style="--i: 1"><a href="#sobre" data-i18n="menu_about">Sobre Nós</a></li>
-        <li style="--i: 2"><a href="#projetos" data-i18n="menu_projects">Projetos</a></li>
-        <li style="--i: 3"><a href="#contato" data-i18n="menu_contact">Contato</a></li>
-      </ul>
-    </div>
+    <section id="services">
+        <div class="container">
+            <div class="reveal">
+                <span class="badge" data-i18n="services_badge">Core Expertise</span>
+                <h2 class="section-title" data-i18n="services_title">We write the systems your startup actually needs.</h2>
+                <p class="section-subtitle" data-i18n="services_subtitle">No generic templates. No bloated frameworks. Just clean code tailored to solve complex operational bottlenecks.</p>
+            </div>
 
-    <main class="hero">
-      <div class="background-geometry">
-        <div id="globe-3d"></div>
-        <div class="line line-1"></div>
-        <div class="line line-2"></div>
-        <div class="line line-3"></div>
-      </div>
+            <div class="services-grid">
+                <div class="card reveal">
+                    <i data-lucide="database" class="card-icon"></i>
+                    <h3 data-i18n="serv1_title">Custom ERPs</h3>
+                    <p data-i18n="serv1_desc">Bespoke management systems that actually map to your business logic, not the other way around. Built for high operational complexity.</p>
+                </div>
+                
+                <div class="card reveal" style="transition-delay: 100ms;">
+                    <i data-lucide="bot" class="card-icon"></i>
+                    <h3 data-i18n="serv2_title">Web Automation & Scraping</h3>
+                    <p data-i18n="serv2_desc">Selenium, BeautifulSoup, and PyAutoGUI. We turn manual data entry and repetitive workflows into highly efficient, automated pipelines.</p>
+                </div>
 
-      <div class="content">
-        <h1 data-i18n="hero_title">System<br />Architecture<br />Redefined.</h1>
-        <p class="subtitle" data-i18n="hero_subtitle">
-          Next-generation infrastructure for scalable applications. Minimalist
-          code. Maximum performance.
-        </p>
-        <button
-          class="btn-cta"
-          onclick="document.getElementById('projetos').scrollIntoView()"
-          data-i18n="hero_cta"
-        >
-          Get Started
-        </button>
-      </div>
-    </main>
+                <div class="card reveal" style="transition-delay: 200ms;">
+                    <i data-lucide="cloud" class="card-icon"></i>
+                    <h3 data-i18n="serv3_title">Scalable SaaS Platforms</h3>
+                    <p data-i18n="serv3_desc">Architected for multi-tenancy, high concurrency, and zero downtime. We build products designed to scale from day one.</p>
+                </div>
 
-    <section id="sobre" class="content-section">
-      <div class="container">
-        <h2 data-i18n="about_title">About Us</h2>
-        <p class="section-text" data-i18n="about_text">
-          We are architects of the digital future. Our mission is to simplify
-          complexity through elegant code and robust infrastructure. We don't
-          just build software; we engineer ecosystems designed for scalability
-          and precision.
-        </p>
-      </div>
+                <div class="card reveal" style="transition-delay: 300ms;">
+                    <i data-lucide="zap" class="card-icon"></i>
+                    <h3 data-i18n="serv4_title">High-Performance APIs</h3>
+                    <p data-i18n="serv4_desc">FastAPI, Django, or Spring Boot. We implement secure, documented, and lightning-fast backend architectures for any frontend.</p>
+                </div>
+            </div>
+        </div>
     </section>
 
-    <section id="projetos" class="content-section dark-bg">
-      <div class="container">
-        <h2 data-i18n="projects_title">Selected Works</h2>
-        <div class="project-grid">
-          
-          <div class="project-card" 
-               hx-get="{% url 'project_detail' 1 %}" 
-               hx-target="#modal-container" 
-               hx-swap="innerHTML">
-            <h3>CourierIQ</h3>
-            <p data-i18n="proj_1_desc">Intelligent logistics & delivery tracking system.</p>
-          </div>
-          
-          <div class="project-card"
-               hx-get="{% url 'project_detail' 2 %}" 
-               hx-target="#modal-container" 
-               hx-swap="innerHTML">
-            <h3>Online Courses</h3>
-            <p data-i18n="proj_2_desc">Scalable LMS platform for digital education.</p>
-          </div>
-          
-          <div class="project-card"
-               hx-get="{% url 'project_detail' 3 %}" 
-               hx-target="#modal-container" 
-               hx-swap="innerHTML">
-            <h3>Store Core</h3>
-            <p data-i18n="proj_3_desc">Robust e-commerce backend architecture.</p>
-          </div>
-            
-          <div class="project-card"
-               hx-get="{% url 'project_detail' 4 %}" 
-               hx-target="#modal-container" 
-               hx-swap="innerHTML">
-            <h3>Hotel Manager</h3>
-            <p data-i18n="proj_4_desc">Versatile Hotel management system.</p>
+    <section id="process">
+        <div class="container">
+            <div class="reveal">
+                <span class="badge" data-i18n="process_badge">Methodology</span>
+                <h2 class="section-title" data-i18n="process_title">Startup speed.<br>Enterprise rigor.</h2>
+            </div>
+
+            <div class="process-list">
+                <div class="process-item reveal">
+                    <div>
+                        <h3 data-i18n="proc1_title">Scope & Architecture</h3>
+                        <p data-i18n="proc1_desc">No guessing. We map the data flow, database schemas, and system architecture before writing a single line of code to ensure structural integrity.</p>
+                    </div>
+                </div>
+                
+                <div class="process-item reveal">
+                    <div>
+                        <h3 data-i18n="proc2_title">Focused Engineering Sprints</h3>
+                        <p data-i18n="proc2_desc">Rapid iterations with transparent code reviews. You get access to a staging environment early, seeing what we build as we build it.</p>
+                    </div>
+                </div>
+
+                <div class="process-item reveal">
+                    <div>
+                        <h3 data-i18n="proc3_title">Deployment & Handoff</h3>
+                        <p data-i18n="proc3_desc">Containerized, CI/CD integrated, and production-ready. Handed over with crystal-clear documentation so your internal team can scale it further.</p>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
     </section>
 
-    <section id="contato" class="content-section">
-      <div class="container">
-        <h2 data-i18n="contact_title">Contact</h2>
-        <p class="section-text" data-i18n="contact_sub">Ready to redefine your industry? Let's talk.</p>
-        
-        <div class="contact-grid">
-            <a href="mailto:lucas.lucachak9@gmail.com" class="contact-card">
-                <div class="icon-box">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-                </div>
-                <h3>Email</h3>
-                <p>lucas.lucachak9@gmail.com</p>
-            </a>
+    <section id="portfolio">
+        <div class="container">
+            <div class="reveal">
+                <span class="badge" data-i18n="port_badge">Selected Work</span>
+                <h2 class="section-title" data-i18n="port_title">Built for production.</h2>
+                <p class="section-subtitle" data-i18n="port_subtitle">A glimpse into architectures that drive real business value.</p>
+            </div>
 
-            <a href="https://wa.me/3538030950746" target="_blank" class="contact-card">
-                <div class="icon-box">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+<div class="portfolio-grid">
+                <div class="portfolio-card reveal" style="cursor: pointer;"
+                     hx-get="{% url 'project_detail' 1 %}" 
+                     hx-target="#modal-container" 
+                     hx-swap="innerHTML">
+                    <div class="portfolio-tag" data-i18n="proj1_tag">Logistics & Delivery Tracking</div>
+                    <h3 class="portfolio-title">CourierIQ</h3>
+                    <p class="portfolio-desc" data-i18n="proj1_desc">Sistema inteligente de gestão de entregas e rastreamento. Focado na otimização de rotas e status em tempo real.</p>
+                    <div class="tech-stack">
+                        <span class="tech-badge">Python</span>
+                        <span class="tech-badge">Django</span>
+                        <span class="tech-badge">Tracking API</span>
+                        <span class="tech-badge">Logistics</span>
+                    </div>
+                    <span class="portfolio-link"><span data-i18n="proj_link1">Ver Detalhes</span> <i data-lucide="arrow-up-right"></i></span>
                 </div>
-                <h3>WhatsApp</h3>
-                <p>(+353) 803 095 0746</p>
-            </a>
 
-            <a href="https://www.github.com/lucachak" target="_blank" class="contact-card">
-                <div class="icon-box">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                <div class="portfolio-card reveal" style="transition-delay: 100ms; cursor: pointer;"
+                     hx-get="{% url 'project_detail' 2 %}" 
+                     hx-target="#modal-container" 
+                     hx-swap="innerHTML">
+                    <div class="portfolio-tag" data-i18n="proj2_tag">LMS Education Platform</div>
+                    <h3 class="portfolio-title">Online Courses</h3>
+                    <p class="portfolio-desc" data-i18n="proj2_desc">Plataforma de ensino a distância (LMS) completa. Gerenciamento de alunos, upload de aulas e acompanhamento de progresso.</p>
+                    <div class="tech-stack">
+                        <span class="tech-badge">Django</span>
+                        <span class="tech-badge">Education</span>
+                        <span class="tech-badge">Streaming</span>
+                        <span class="tech-badge">User Mgmt</span>
+                    </div>
+                    <span class="portfolio-link"><span data-i18n="proj_link2">Ver Detalhes</span> <i data-lucide="arrow-up-right"></i></span>
                 </div>
-                <h3>GitHub</h3>
-                <p>@lucachak</p>
-            </a>
 
-            <a href="https://www.linkedin.com/in/lucachak-dev" target="_blank" class="contact-card">
-                <div class="icon-box">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                <div class="portfolio-card reveal" style="transition-delay: 200ms; cursor: pointer;"
+                     hx-get="{% url 'project_detail' 3 %}" 
+                     hx-target="#modal-container" 
+                     hx-swap="innerHTML">
+                    <div class="portfolio-tag" data-i18n="proj3_tag">E-commerce Architecture</div>
+                    <h3 class="portfolio-title">Store Core</h3>
+                    <p class="portfolio-desc" data-i18n="proj3_desc">Backend robusto para comércio eletrônico. Inclui gestão de inventário, carrinho de compras e integração segura de pagamentos.</p>
+                    <div class="tech-stack">
+                        <span class="tech-badge">E-commerce</span>
+                        <span class="tech-badge">Payment Gateway</span>
+                        <span class="tech-badge">Security</span>
+                        <span class="tech-badge">SQL</span>
+                    </div>
+                    <span class="portfolio-link"><span data-i18n="proj_link3">Ver Detalhes</span> <i data-lucide="arrow-up-right"></i></span>
                 </div>
-                <h3>LinkedIn</h3>
-                <p>Connect with me</p>
-            </a>
+                
+                <div class="portfolio-card reveal" style="transition-delay: 300ms; cursor: pointer;"
+                     hx-get="{% url 'project_detail' 4 %}" 
+                     hx-target="#modal-container" 
+                     hx-swap="innerHTML">
+                    <div class="portfolio-tag" data-i18n="proj4_tag">Hotel Management Architecture</div>
+                    <h3 class="portfolio-title">Hotel Manager</h3>
+                    <p class="portfolio-desc" data-i18n="proj4_desc">Backend robusto para gestão de hotel. Inclui gestão de inventário, comandas e integração segura de pagamentos.</p>
+                    <div class="tech-stack">
+                        <span class="tech-badge">Hotel</span>
+                        <span class="tech-badge">CRM</span>
+                        <span class="tech-badge">Security</span>
+                        <span class="tech-badge">PostgreSQL</span>
+                    </div>
+                    <span class="portfolio-link"><span data-i18n="proj_link4">Ver Detalhes</span> <i data-lucide="arrow-up-right"></i></span>
+                </div>
+            </div>
+
+                </section>
+
+    <section id="why-us">
+        <div class="container">
+            <div class="why-us-grid">
+                <div class="why-col reveal">
+                    <h3><i data-lucide="code-2"></i> <span data-i18n="why1_title">Clean Code Protocol</span></h3>
+                    <p data-i18n="why1_desc">Maintainable, heavily tested, and documented. We build digital assets, not technical liabilities. You own everything.</p>
+                </div>
+                
+                <div class="why-col reveal" style="transition-delay: 100ms;">
+                    <h3><i data-lucide="layers"></i> <span data-i18n="why2_title">Stack Agnostic</span></h3>
+                    <p data-i18n="why2_desc">Python, Java, JS. We don't force a single framework; we architect using the precise tool required for your specific bottleneck.</p>
+                </div>
+
+                <div class="why-col reveal" style="transition-delay: 200ms;">
+                    <h3><i data-lucide="rocket"></i> <span data-i18n="why3_title">Direct Line Access</span></h3>
+                    <p data-i18n="why3_desc">We move fast because we lack agency bloat. You communicate directly with the senior engineers building your product.</p>
+                </div>
+            </div>
         </div>
-      </div>
-    </section>    
+    </section>
 
+    <section id="testimonials" class="testimonials">
+        <div class="container">
+            <div class="reveal">
+                <span class="badge" data-i18n="test_badge">Client Outcomes</span>
+                <h2 class="section-title" data-i18n="test_title">The ROI of clean architecture.</h2>
+            </div>
+
+            <div class="testimonial-grid">
+                <div class="testimonial-card reveal">
+                    <i data-lucide="quote" class="quote-icon"></i>
+                    <p class="testimonial-text" data-i18n="test1_quote">"Lucas stepped in when our monolithic app was failing under load. Within weeks, we had a decoupled architecture that just worked. Zero BS, highly technical."</p>
+                    <div class="testimonial-author">
+                        <div class="author-info">
+                            <h4>David R.</h4>
+                            <p data-i18n="test1_role">CTO, FinTech Startup</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-card reveal" style="transition-delay: 100ms;">
+                    <i data-lucide="quote" class="quote-icon"></i>
+                    <p class="testimonial-text" data-i18n="test2_quote">"The Python automation suite saved us two full-time hires instantly. Fast delivery, impeccable code quality, and it hasn't crashed once in production."</p>
+                    <div class="testimonial-author">
+                        <div class="author-info">
+                            <h4>Sarah M.</h4>
+                            <p data-i18n="test2_role">Head of Operations, Logistics Co.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="cta-section">
+        <div class="hero-glow" style="width: 40vw; height: 40vw; top: 50%; opacity: 0.5;"></div>
+        <div class="container">
+            <div class="cta-content reveal">
+                <h2 data-i18n="cta_title">Stop wrestling with bad infrastructure.</h2>
+                <p data-i18n="cta_subtitle">Let's architect a system that scales seamlessly with your business.</p>
+                <a href="https://wa.me/5513999999999?text=Olá%20Lucas!%20Gostaria%20de%20falar%20sobre%20um%20projeto%20/%20Hi%20Lucas!%20I'd%20like%20to%20discuss%20a%20project." class="btn btn-primary" style="font-size: 1.1rem; padding: 1rem 2rem;" data-i18n="cta_btn">
+                    Start the Conversation
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <a href="#" class="logo">Lucachak<span>_</span>Tech</a>
+                    <p data-i18n="footer_desc">Precision engineering for startups that can't afford bad code.</p>
+                </div>
+
+                <div class="footer-links">
+                    <div class="footer-col">
+                        <h4 data-i18n="footer_nav_title">Navigation</h4>
+                        <ul>
+                            <li><a href="#services" data-i18n="nav_expertise">Expertise</a></li>
+                            <li><a href="#portfolio" data-i18n="nav_work">Work</a></li>
+                            <li><a href="#process" data-i18n="nav_process">Process</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-col">
+                        <h4 data-i18n="footer_contact_title">Contact</h4>
+                        <ul>
+                            <li><a href="mailto:lucas.lucachak9@gmail.com" data-i18n="footer_email">Email Us</a></li>
+                            <li>
+                                <a href="https://wa.me/3530830950746?text=Olá%20Lucas!%20Gostaria%20de%20falar%20sobre%20um%20projeto%20/%20Hi%20Lucas!%20I'd%20like%20to%20discuss%20a%20project." target="_blank">WhatsApp</a></li>
+                            <li><a href="https://github.com/lucachak" target="_blank">GitHub</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p><span data-i18n="footer_copy">&copy; 2026 Lucachak Tech. All rights reserved.</span></p>
+                <div class="social-links">
+                    <a href="#" aria-label="LinkedIn"><i data-lucide="linkedin" style="width: 20px; height: 20px;"></i></a>
+                    <a href="#" aria-label="GitHub"><i data-lucide="github" style="width: 20px; height: 20px;"></i></a>
+                    <a href="#" aria-label="Twitter"><i data-lucide="twitter" style="width: 20px; height: 20px;"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
     <div id="modal-container"></div>
     
-    <script src="{% static 'js/index.js' %}"></script>
-    
-    <script>
+
+    <script type="module">
+        // ==========================================
+        // TRANSLATIONS DICTIONARY
+        // ==========================================
         const translations = {
             en: {
-                menu_about: "About Us",
-                menu_projects: "Projects",
-                menu_contact: "Contact",
-                hero_title: "System<br>Architecture<br>Redefined.",
-                hero_subtitle: "Next-generation infrastructure for scalable applications. Minimalist code. Maximum performance.",
-                hero_cta: "Get Started",
-                about_title: "About Us",
-                about_text: "We are architects of the digital future. Our mission is to simplify complexity through elegant code and robust infrastructure. We don't just build software; we engineer ecosystems designed for scalability and precision.",
-                projects_title: "Selected Works",
-                proj_1_desc: "Intelligent logistics & delivery tracking system.",
-                proj_2_desc: "Scalable LMS platform for digital education.",
-                proj_3_desc: "Robust e-commerce backend architecture.",
-                prokect_4_desc: "Versatile Hotel management system.",
-                contact_title: "Contact",
-                contact_sub: "Ready to redefine your industry? Let's talk."
+                nav_expertise: "Expertise",
+                nav_work: "Work",
+                nav_process: "Process",
+                nav_cta: "Let's Talk",
+                hero_badge: "Boutique Software House",
+                hero_title: "Ship scalable systems.<br><span>Leave tech debt behind.</span>",
+                hero_subtitle: "Lucachak Tech engineers custom software, automation pipelines, and robust backend architectures for startups that demand precision.",
+                hero_btn_primary: "Initialize Project",
+                hero_btn_secondary: "Review Our Stack",
+                services_badge: "Core Expertise",
+                services_title: "We write the systems your startup actually needs.",
+                services_subtitle: "No generic templates. No bloated frameworks. Just clean code tailored to solve complex operational bottlenecks.",
+                serv1_title: "Custom ERPs",
+                serv1_desc: "Bespoke management systems that actually map to your business logic, not the other way around. Built for high operational complexity.",
+                serv2_title: "Web Automation & Scraping",
+                serv2_desc: "Selenium, BeautifulSoup, and PyAutoGUI. We turn manual data entry and repetitive workflows into highly efficient, automated pipelines.",
+                serv3_title: "Scalable SaaS Platforms",
+                serv3_desc: "Architected for multi-tenancy, high concurrency, and zero downtime. We build products designed to scale from day one.",
+                serv4_title: "High-Performance APIs",
+                serv4_desc: "FastAPI, Django, or Spring Boot. We implement secure, documented, and lightning-fast backend architectures for any frontend.",
+                process_badge: "Methodology",
+                process_title: "Startup speed.<br>Enterprise rigor.",
+                proc1_title: "Scope & Architecture",
+                proc1_desc: "No guessing. We map the data flow, database schemas, and system architecture before writing a single line of code to ensure structural integrity.",
+                proc2_title: "Focused Engineering Sprints",
+                proc2_desc: "Rapid iterations with transparent code reviews. You get access to a staging environment early, seeing what we build as we build it.",
+                proc3_title: "Deployment & Handoff",
+                proc3_desc: "Containerized, CI/CD integrated, and production-ready. Handed over with crystal-clear documentation so your internal team can scale it further.",
+                port_badge: "Selected Work",
+                port_title: "Built for production.",
+                port_subtitle: "A glimpse into architectures that drive real business value.",
+                proj1_tag: "Enterprise Resource Planning",
+                proj1_desc: "A comprehensive ERP featuring a real-time Kanban board, complex operational flows, and adaptive dark/light UI. Engineered to handle thousands of internal queries seamlessly.",
+                proj_link1: "Review Architecture",
+                proj2_tag: "Workflow Automation",
+                proj2_desc: "Multi-platform automation bots that replaced over 40 hours of manual data entry per week. Incorporates headless scraping, UI interaction, and structured data exports.",
+                proj_link2: "Review Script Logic",
+                proj3_tag: "SaaS Platform",
+                proj3_desc: "A subscription management SaaS handling multi-tenant billing, automated invoicing, and real-time financial analytics for digital agencies.",
+                proj_link3: "Review Live App",
+                why1_title: "Clean Code Protocol",
+                why1_desc: "Maintainable, heavily tested, and documented. We build digital assets, not technical liabilities. You own everything.",
+                why2_title: "Stack Agnostic",
+                why2_desc: "Python, Java, JS. We don't force a single framework; we architect using the precise tool required for your specific bottleneck.",
+                why3_title: "Direct Line Access",
+                why3_desc: "We move fast because we lack agency bloat. You communicate directly with the senior engineers building your product.",
+                test_badge: "Client Outcomes",
+                test_title: "The ROI of clean architecture.",
+                test1_quote: "\"Lucas stepped in when our monolithic app was failing under load. Within weeks, we had a decoupled architecture that just worked. Zero BS, highly technical.\"",
+                test1_role: "CTO, FinTech Startup",
+                test2_quote: "\"The Python automation suite saved us two full-time hires instantly. Fast delivery, impeccable code quality, and it hasn't crashed once in production.\"",
+                test2_role: "Head of Operations, Logistics Co.",
+                cta_title: "Stop wrestling with bad infrastructure.",
+                cta_subtitle: "Let's architect a system that scales seamlessly with your business.",
+                cta_btn: "Start the Conversation",
+                footer_desc: "Precision engineering for startups that can't afford bad code.",
+                footer_nav_title: "Navigation",
+                footer_contact_title: "Contact",
+                footer_email: "Email Us",
+                footer_copy: "&copy; 2026 Lucachak Tech. All rights reserved."
             },
             pt: {
-                menu_about: "Sobre Nós",
-                menu_projects: "Projetos",
-                menu_contact: "Contato",
-                hero_title: "Arquitetura<br>de Sistemas<br>Redefinida.",
-                hero_subtitle: "Infraestrutura de próxima geração para aplicações escaláveis. Código minimalista. Performance máxima.",
-                hero_cta: "Começar",
-                about_title: "Sobre Nós",
-                about_text: "Somos arquitetos do futuro digital. Nossa missão é simplificar a complexidade através de código elegante e infraestrutura robusta. Não apenas construímos software; projetamos ecossistemas desenhados para escalabilidade e precisão.",
-                projects_title: "Trabalhos Selecionados",
-                proj_1_desc: "Sistema inteligente de logística e rastreamento de entregas.",
-                proj_2_desc: "Plataforma LMS escalável para educação digital.",
-                proj_3_desc: "Arquitetura robusta de backend para e-commerce.",
-                prokect_4_desc: "Sistema de gestão de hotel versátil.",
-                contact_title: "Contato",
-                contact_sub: "Pronto para redefinir sua indústria? Vamos conversar."
+                nav_expertise: "Especialidades",
+                nav_work: "Trabalhos",
+                nav_process: "Processo",
+                nav_cta: "Vamos Conversar",
+                hero_badge: "Boutique de Software",
+                hero_title: "Construa sistemas escaláveis.<br><span>Deixe a dívida técnica para trás.</span>",
+                hero_subtitle: "A Lucachak Tech projeta softwares sob medida, pipelines de automação e arquiteturas backend robustas para startups que exigem precisão.",
+                hero_btn_primary: "Iniciar Projeto",
+                hero_btn_secondary: "Ver Nossa Stack",
+                services_badge: "Nossa Especialidade",
+                services_title: "Criamos os sistemas que a sua startup realmente precisa.",
+                services_subtitle: "Sem templates genéricos. Sem frameworks pesados. Apenas código limpo criado para resolver gargalos operacionais complexos.",
+                serv1_title: "ERPs Sob Medida",
+                serv1_desc: "Sistemas de gestão que realmente se mapeiam à sua lógica de negócios, não o contrário. Construídos para alta complexidade operacional.",
+                serv2_title: "Automação Web & Scraping",
+                serv2_desc: "Selenium, BeautifulSoup e PyAutoGUI. Transformamos trabalho manual em pipelines automatizados e altamente eficientes.",
+                serv3_title: "Plataformas SaaS Escaláveis",
+                serv3_desc: "Arquitetadas para multi-tenancy, alta concorrência e zero downtime. Construímos produtos desenhados para escalar desde o dia um.",
+                serv4_title: "APIs de Alta Performance",
+                serv4_desc: "FastAPI, Django ou Spring Boot. Implementamos backends seguros, documentados e ultrarrápidos para qualquer frontend.",
+                process_badge: "Metodologia",
+                process_title: "Velocidade de startup.<br>Rigor corporativo.",
+                proc1_title: "Escopo & Arquitetura",
+                proc1_desc: "Sem adivinhações. Mapeamos o fluxo de dados e os schemas de banco de dados antes de escrever uma linha de código para garantir a integridade.",
+                proc2_title: "Sprints de Engenharia Focadas",
+                proc2_desc: "Iterações rápidas com transparência. Você ganha acesso ao ambiente de homologação cedo, vendo o que construímos no ritmo em que construímos.",
+                proc3_title: "Deploy & Entrega",
+                proc3_desc: "Containerizado, integrado com CI/CD e pronto para produção. Entregue com documentação clara para que sua equipe interna possa escalar.",
+                port_badge: "Trabalhos Selecionados",
+                port_title: "Feito para produção.",
+                port_subtitle: "Um vislumbre de arquiteturas que geram valor real aos negócios.",
+                proj1_tag: "Gestão de Recursos Empresariais",
+                proj1_desc: "Um ERP completo com quadro Kanban em tempo real, fluxos operacionais complexos e UI adaptável. Projetado para milhares de queries.",
+                proj_link1: "Ver Arquitetura",
+                proj2_tag: "Automação de Fluxos de Trabalho",
+                proj2_desc: "Bots de automação multiplataforma que substituíram mais de 40h de entrada manual de dados por semana. Scraping headless e extração estruturada.",
+                proj_link2: "Ver Lógica do Script",
+                proj3_tag: "Plataforma SaaS",
+                proj3_desc: "SaaS de gestão de assinaturas lidando com multi-tenancy, faturamento automatizado e análises financeiras em tempo real para agências.",
+                proj_link3: "Ver App Ao Vivo",
+                why1_title: "Protocolo de Código Limpo",
+                why1_desc: "Fácil manutenção, fortemente testado e documentado. Construímos ativos digitais, não passivos técnicos. O código é seu.",
+                why2_title: "Independência de Stack",
+                why2_desc: "Python, Java, JS. Não forçamos um único framework; projetamos a arquitetura usando a ferramenta exata necessária para o seu problema.",
+                why3_title: "Acesso e Linha Direta",
+                why3_desc: "Nós nos movemos rápido porque não temos a burocracia de agências. Você fala diretamente com os engenheiros que constroem seu produto.",
+                test_badge: "Resultados de Clientes",
+                test_title: "O ROI da arquitetura limpa.",
+                test1_quote: "\"O Lucas interveio quando nosso app monolítico estava falhando sob carga. Em semanas, tínhamos uma arquitetura desacoplada excelente. Zero enrolação, altamente técnico.\"",
+                test1_role: "CTO, Startup FinTech",
+                test2_quote: "\"A automação em Python nos economizou duas contratações full-time instantaneamente. Entrega rápida, código impecável e nunca caiu em produção.\"",
+                test2_role: "Diretora de Operações, Logística Co.",
+                cta_title: "Pare de brigar com infraestrutura ruim.",
+                cta_subtitle: "Vamos arquitetar um sistema que escale sem problemas junto com o seu negócio.",
+                cta_btn: "Iniciar a Conversa",
+                footer_desc: "Engenharia de precisão para startups que não podem pagar por código ruim.",
+                footer_nav_title: "Navegação",
+                footer_contact_title: "Contato",
+                footer_email: "Envie um Email",
+                footer_copy: "&copy; 2026 Lucachak Tech. Todos os direitos reservados."
             }
         };
 
-        const langBtn = document.getElementById('lang-toggle');
-        let currentLang = localStorage.getItem('site_lang') || 'en';
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Initialize Lucide Icons
+            lucide.createIcons();
 
-        function updateTexts() {
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                const key = el.getAttribute('data-i18n');
-                if (translations[currentLang][key]) {
-                    el.innerHTML = translations[currentLang][key];
-                }
+            // ==========================================
+            // LANGUAGE TOGGLE LOGIC
+            // ==========================================
+            const langBtn = document.getElementById('lang-btn');
+            const htmlTag = document.documentElement;
+            
+            // Check Local Storage for Language
+            let currentLang = localStorage.getItem('site_lang') || 'en';
+            
+            function applyTranslations(lang) {
+                document.querySelectorAll('[data-i18n]').forEach(el => {
+                    const key = el.getAttribute('data-i18n');
+                    if (translations[lang] && translations[lang][key]) {
+                        el.innerHTML = translations[lang][key];
+                    }
+                });
+                
+                // Update Button Text
+                // If language is English, button shows 'PT' (to switch to Portuguese)
+                langBtn.textContent = lang === 'en' ? 'PT' : 'EN';
+                htmlTag.setAttribute('lang', lang);
+            }
+
+            // Apply initial language
+            applyTranslations(currentLang);
+
+            langBtn.addEventListener('click', () => {
+                currentLang = currentLang === 'en' ? 'pt' : 'en';
+                localStorage.setItem('site_lang', currentLang);
+                applyTranslations(currentLang);
             });
-            langBtn.textContent = currentLang === 'en' ? 'PT' : 'EN';
-        }
 
-        langBtn.addEventListener('click', () => {
-            currentLang = currentLang === 'en' ? 'pt' : 'en';
-            localStorage.setItem('site_lang', currentLang);
-            updateTexts();
+
+            // ==========================================
+            // THEME TOGGLE LOGIC
+            // ==========================================
+            const themeBtn = document.getElementById('theme-btn');
+            const themeIcon = document.getElementById('theme-icon');
+            
+            // Check Local Storage
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            htmlTag.setAttribute('data-theme', savedTheme);
+            updateIcon(savedTheme);
+
+            themeBtn.addEventListener('click', () => {
+                const currentTheme = htmlTag.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                
+                htmlTag.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                updateIcon(newTheme);
+            });
+
+            function updateIcon(theme) {
+                if (theme === 'dark') {
+                    themeIcon.setAttribute('data-lucide', 'sun');
+                } else {
+                    themeIcon.setAttribute('data-lucide', 'moon');
+                }
+                lucide.createIcons(); // Re-render icon
+            }
+
+            // ==========================================
+            // SCROLL REVEAL ANIMATIONS
+            // ==========================================
+            const revealElements = document.querySelectorAll('.reveal');
+            
+            const revealOptions = {
+                threshold: 0.1,
+                rootMargin: "0px 0px -50px 0px"
+            };
+
+            const revealOnScroll = new IntersectionObserver(function(entries, observer) {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) return;
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target); // Run once
+                });
+            }, revealOptions);
+
+            revealElements.forEach(el => {
+                revealOnScroll.observe(el);
+            });
         });
 
-        // Inicializa
-        updateTexts();
+document.body.addEventListener('htmx:afterSwap', function(evt) {
+    if (evt.detail.target.id === 'modal-container') {
+        const currentLang = localStorage.getItem('site_lang') || 'en';
+        applyTranslations(currentLang);
+    }
+});
     </script>
-  </body></html>
+</body>
+</html>
